@@ -1,0 +1,8 @@
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\obj\Release\YT-DLP WRAPPER.csproj.AssemblyReference.cache
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\obj\Release\YT-DLP WRAPPER.csproj.CoreCompileInputs.cache
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\bin\Release\yt-dlp.exe.config
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\bin\Release\yt-dlp.exe
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\bin\Release\yt-dlp.pdb
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\obj\Release\yt-dlp.exe
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\obj\Release\yt-dlp.pdb
+C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\obj\Release\yt-dlp.exe.config
