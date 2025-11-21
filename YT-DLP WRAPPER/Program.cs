@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -48,9 +48,10 @@ namespace YT_DLP_WRAPPER
             {
                 "--no-cache-dir",
                 "--rm-cache-dir",
-                "-f 140",
+                "--format",
+                "(mp4/best)[protocol=https]/(ba)[protocol=https]",
                 "--get-url"
-                //"\"bestaudio[protocol!*=m3u8]\""
+
             };
             Log($"Fixed args: {string.Join(" ", fixedArgs.Select(QuoteArg))}");
 
