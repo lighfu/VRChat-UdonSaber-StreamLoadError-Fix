@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace YT_DLP_WRAPPER
 
             var assemblyDir = AppContext.BaseDirectory;
             var ytDlpPath = Path.Combine(assemblyDir, "yt-dlp_.exe");
-            //var cookiePath = Path.Combine(assemblyDir, "cookies.txt");
+            var cookiePath = Path.Combine(assemblyDir, "cookies.txt");
             var logPath = Path.Combine(assemblyDir, "wrapper.log");
             var logLock = new object();
 
@@ -44,29 +45,48 @@ namespace YT_DLP_WRAPPER
             var lastInputArg = GetLastArgument(originalArgs);
             Log($"Last input arg: {(lastInputArg == null ? "(none)" : QuoteArg(lastInputArg))}");
 
-            var fixedArgs = new[]
-            {
-                "--no-cache-dir",
-                "--rm-cache-dir",
-                "--format",
-                "(mp4/best)[protocol=https]/(ba)[protocol=https]",
-                "--get-url"
 
-            };
-            Log($"Fixed args: {string.Join(" ", fixedArgs.Select(QuoteArg))}");
+            if (originalArgs.Length == 0) {
+                Console.WriteLine("このまま実行はできません。install.bat を実行してください。");
+                Console.WriteLine("詳細な情報は: https://ajisaiflow.booth.pm/items/7673438");
+                Console.WriteLine("\nエンターキーで終了します...");
+                Console.ReadLine();
+            }
 
+            // オリジナルの yt-dlp がない場合はエラーにします。
             if (!File.Exists(ytDlpPath))
             {
-                Log($"yt-dlp.exe not found: {ytDlpPath}");
+                var error_message = $"yt-dlp_.exe (Original yt-dlp) not found: {ytDlpPath}";
+                Log(error_message);
+                Console.Error.WriteLine(error_message);
+
                 return 1;
             }
 
-            //if (!File.Exists(cookiePath))
+            // 引数リストを定義
+            var fixedArgs = new List<string>();
+
+            // Cookieファイルがある場合は引数に追加する。
+            //if (File.Exists(cookiePath))
             //{
-            //    Log($"Cookie file not found: {cookiePath}");
-            //    return 1;
+            //    fixedArgs.Add("--cookies");
+            //    fixedArgs.Add("cookies.txt");
+            //    Log($"Cookies file found: {cookiePath}");
             //}
 
+            // 置換後の引数
+            fixedArgs.AddRange(new[]
+            {
+                "--no-cache-dir",
+                "--rm-cache-dir",
+                "-f",
+                "(mp4/best)[protocol=https]/ba[protocol=https]/b/b*",
+                "--get-url"
+            });
+
+            Log($"Fixed args: {string.Join(" ", fixedArgs.Select(QuoteArg))}");
+
+            // プロセス開始情報を定義
             var psi = new ProcessStartInfo
             {
                 FileName = ytDlpPath,
@@ -79,7 +99,7 @@ namespace YT_DLP_WRAPPER
             };
 
             var combinedArgs = lastInputArg == null
-                ? fixedArgs
+                ? fixedArgs.ToArray()
                 : fixedArgs.Concat(new[] { lastInputArg }).ToArray();
             psi.Arguments = string.Join(" ", combinedArgs.Select(QuoteArg));
 
@@ -87,12 +107,17 @@ namespace YT_DLP_WRAPPER
             Log($"Arguments: {psi.Arguments}");
 
             var process = Process.Start(psi);
+
+            // あるべきプロセスが存在しない場合
             if (process is null)
             {
-                Log("Failed to start yt-dlp.");
+                Log("Failed to start yt-dlp_.exe");
+                Console.Error.WriteLine($"Failed to start yt-dlp_.exe ({ytDlpPath})");
+
                 return 1;
             }
 
+            // yt-dlp_.exe からの結果受け取りコールバック
             process.OutputDataReceived += (_, e) =>
             {
                 if (e.Data != null)
@@ -118,6 +143,7 @@ namespace YT_DLP_WRAPPER
             return process.ExitCode;
         }
 
+        // 引数をエスケープ処理しながら囲みます。
         private static string QuoteArg(string arg)
         {
             if (string.IsNullOrEmpty(arg))
@@ -133,7 +159,8 @@ namespace YT_DLP_WRAPPER
             var escaped = arg.Replace("\"", "\\\"");
             return $"\"{escaped}\"";
         }
-
+        
+        // 最後の引数を取得します。
         private static string GetLastArgument(string[] args)
         {
             if (args == null || args.Length == 0)
