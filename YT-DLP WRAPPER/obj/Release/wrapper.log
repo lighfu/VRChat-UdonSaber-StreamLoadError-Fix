@@ -1,0 +1,11 @@
+[2025-11-30 16:56:35] Startup: args=(none)
+[2025-11-30 16:56:35] Last input arg: (none)
+[2025-11-30 16:56:37] Fixed args: --no-cache-dir --rm-cache-dir -f (mp4/best)[protocol=https]/ba[protocol=https]/b/b* --get-url
+[2025-11-30 16:56:37] Executable: C:\Users\sakuu\source\repos\YT-DLP WRAPPER\YT-DLP WRAPPER\obj\Release\yt-dlp_.exe
+[2025-11-30 16:56:37] Arguments: --no-cache-dir --rm-cache-dir -f (mp4/best)[protocol=https]/ba[protocol=https]/b/b* --get-url
+[2025-11-30 16:56:37] STDERR: Traceback (most recent call last):
+[2025-11-30 16:56:37] STDERR:   File "__main__.py", line 19, in <module>
+[2025-11-30 16:56:37] STDERR:   File "yt_dlp\__init__.pyc", line 1105, in main
+[2025-11-30 16:56:37] STDERR:   File "yt_dlp\__init__.pyc", line 1004, in _real_main
+[2025-11-30 16:56:37] STDERR: AttributeError: 'Values' object has no attribute 'load_info_filename'
+[2025-11-30 16:56:37] Exit: code=255
